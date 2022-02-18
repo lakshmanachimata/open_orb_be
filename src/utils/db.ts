@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('./config');
 const debug = process.env.DB_DEBUG && process.env.DB_DEBUG == 'true' ? true : false;
-const loggger = require('./logger.ts')
+const loggger = require('./logger')
 import dotenv from 'dotenv';
 dotenv.config();
 
