@@ -5,18 +5,28 @@ import { validate } from 'express-validation';
 import { GAuthRequest } from '../utils/reqschema';
 
 import authsvc from '../services/authsvc'
+import usersvc from '../services/usersvc'
+
 let Schema = mongoose.Schema;
 
 
 module.exports = function (app) {
     app.route('/hnoapi/validategtoken' , [validate(GAuthRequest)])
         .post(async (req, res) => {
-            logger.log( "AUTH","received request body is     " + JSON.stringify(req.body) )
             authsvc.validateAndCreateUser(req.body,function(gresponse){
                 if(gresponse){
+                    logger.log( "AUTH","received response body is     " + JSON.stringify(gresponse) )
                     switch(gresponse.status){
                         case 1:
-                            return res.json({status: 200, message: "OK", env: process.env.NODE_ENV});
+                            usersvc.createHNUser(req.body, gresponse.data ,function(userData: any) {
+                                // if(userData.created){
+                                //     return res.json({status: 200, message: userData, env: process.env.NODE_ENV});
+                                // }else{
+                                //     return res.json({status: 200, message: (userData.message?userData.message:"Unable to create user"), env: process.env.NODE_ENV});
+                                // }
+                                return res.json({status: 200, message: userData, env: process.env.NODE_ENV});
+                            })
+                            break;
                         case 2:
                             return res.json({status: 200, message: "OK", env: process.env.NODE_ENV});
                         }

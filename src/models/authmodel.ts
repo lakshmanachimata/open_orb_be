@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-let Schema = mongoose.Schema;
+import { model, Schema ,Model, Document } from 'mongoose';
 
 import {
 UserStatus,
@@ -13,7 +12,7 @@ AccTypeEnum
 } from '../constants';
 
 
-export interface IAuth {
+export interface IAuth extends Document{
   _id?: any;
   __v?: any;
   userId : string,

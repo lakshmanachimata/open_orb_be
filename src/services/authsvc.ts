@@ -22,13 +22,33 @@ export const validateAndCreateUser = async ( body, callback )=>{
           .then(function () {
               let gresObj = {
                   status : -1,
+                  errorCode : 100,
+                  data : {},
                   message : "UNAUTHORISED"
               }
-              if(googleUserData && googleUserData.email && googleUserData.email == body.email){
-                gresObj.status = 1,
-                gresObj.message = "AUTHORISED"
+              if(googleUserData && googleUserData.email ){
+                if(googleUserData.email == body.email){
+                  logger.log("AUTHSVC" , "validateAndCreateUser email_verified  "  + googleUserData.email_verified);
+                  if(googleUserData.email_verified){
+                    gresObj.status = 1,
+                    gresObj.data = googleUserData;
+                    gresObj.message = "AUTHORISED"
+                  }else{
+                    gresObj.data = googleUserData;
+                    gresObj.message = "Email not verified"
+                    gresObj.errorCode = 103
+                  }
+                }else{
+                  gresObj.data = googleUserData;
+                  gresObj.message = "Email not matched"
+                  gresObj.errorCode = 102
+                }
+              }else{
+                gresObj.data = googleUserData;
+                gresObj.message = "Email does not exists"
+                gresObj.errorCode = 101
               }
-              callback(gresObj)
+              return callback(gresObj)
           });
     }
     catch(err){

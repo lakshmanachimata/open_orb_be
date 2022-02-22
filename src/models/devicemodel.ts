@@ -1,6 +1,5 @@
-import mongoose from 'mongoose';
-let Schema = mongoose.Schema;
-import { ObjectId } from "mongoose";
+import { model, Schema ,Model, Document, ObjectId } from 'mongoose';
+
 
 import {
     DeviceOS,
@@ -17,7 +16,7 @@ import {
 
 
 
-export interface IDevice {
+export interface IDevice extends Document {
     _id?: any;
     __v?: any;
     deviceid?: string;

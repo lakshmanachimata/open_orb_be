@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-let Schema = mongoose.Schema;
+import { model, Schema ,Model, Document, ObjectId } from 'mongoose';
+
 
 import {
 UserStatus,
@@ -13,7 +13,7 @@ AccTypeEnum
 } from '../constants';
 
 
-export interface ISession {
+export interface ISession extends Document {
   _id?: any;
   __v?: any;
   userId : string,
