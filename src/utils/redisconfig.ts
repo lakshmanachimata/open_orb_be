@@ -40,7 +40,7 @@ const formatForProd = (): IRedisConfig => {
   }
   return {
     sentinels: redisNodes,
-    name: 'tilrdmaster',
+    name: 'homenet',
     sentinelPassword: redisPassword,
     password: redisPassword,
   };
