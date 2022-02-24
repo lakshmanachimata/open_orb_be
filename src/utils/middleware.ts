@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
+var jwt = require('jsonwebtoken');
 const env = process.env.NODE_ENV || 'development';
 
 export const openapiMiddleware = async function (req, res, next) {

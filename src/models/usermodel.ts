@@ -16,8 +16,8 @@ export interface IUser extends Document {
   _id?: any;
   __v?: any;
   userId : string,
-  googleid : String,
-  googlepicurl : String,
+  googleid : string,
+  googlepicurl : string,
   nwid : number,
   email : string,
   phone : string,

@@ -2,7 +2,46 @@ import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import logger from '../utils/logger';
+import { ISession , Session} from '../models/session';
+var jwt = require('jsonwebtoken');
 
+export const createUserSession = async ( userData, body, user ,callback )=>{
+  let token = jwt.sign({ userId : userData.userId, email: userData.email, deviceId : body.deviceId,  }, process.env.JWT_SESSION_KEY);
+  const session : ISession = new Session({
+    sessionToken :token,
+    userId : userData.userId,
+    ipaddress : body.ipaddress,
+    actSessionToken : true,
+    location : body.location,
+    deviceId : body.deviceId,
+    deviceLocale : body.deviceLocale,
+    deviceHost : body.deviceHost,
+    osVersion : body.osVersion,
+    deviceOSVersion : body.deviceOSVersion,
+    deviceModel : body.deviceModel,
+    deviceMake : body.deviceMake,
+    isPhysicalDevice : body.isPhysicalDevice,
+    isActiveNow : true,
+    lastActiveTime : new Date(),
+  })
+    session.save(function(error){
+      if(error){
+          logger.log("AUTHSVC" , "createUserSession  save error " + JSON.stringify(error) )
+          return callback(token,false)
+      }else{
+          logger.log("AUTHSVC" , "createUserSession  save success " + JSON.stringify(user) )
+          return callback(token,true)
+      }
+  })
+}
+
+export const checkSession = async ( sessionToken, body, newUser ,callback )=>{
+  callback(sessionToken);
+}
+
+export const removeSession = async ( sessionToken, body, newUser ,callback )=>{
+  callback(sessionToken);
+}
 
 export const validateAndCreateUser = async ( body, callback )=>{
     try{
@@ -57,7 +96,7 @@ export const validateAndCreateUser = async ( body, callback )=>{
 }
 
 let authsvc = {
-    validateAndCreateUser
+    validateAndCreateUser, createUserSession, checkSession , removeSession
 }
 
 export default authsvc

@@ -18,13 +18,20 @@ module.exports = function (app) {
                     logger.log( "AUTH","received response body is     " + JSON.stringify(gresponse) )
                     switch(gresponse.status){
                         case 1:
-                            usersvc.createHNUser(req.body, gresponse.data ,function(userData: any) {
-                                // if(userData.created){
-                                //     return res.json({status: 200, message: userData, env: process.env.NODE_ENV});
-                                // }else{
-                                //     return res.json({status: 200, message: (userData.message?userData.message:"Unable to create user"), env: process.env.NODE_ENV});
-                                // }
-                                return res.json({status: 200, message: userData, env: process.env.NODE_ENV});
+                            usersvc.createHNUser(req.body, gresponse.data ,function(userData: any, newUser) {
+                                if(userData.userId){
+                                    authsvc.createUserSession(userData,req.body,newUser,function(token,success){
+                                        //TODO handle failure of saving session Token
+                                        userData.token = token;
+                                        if(success){
+                                            return res.json({status: 200, message: userData, env: process.env.NODE_ENV});
+                                        }else{
+                                            return res.json({status: 200, message: userData, env: process.env.NODE_ENV});
+                                        }
+                                    })
+                                }else{
+                                    return res.json({status: 200, message: (userData.message?userData.message:"Unable to create user"), env: process.env.NODE_ENV});
+                                }
                             })
                             break;
                         case 2:

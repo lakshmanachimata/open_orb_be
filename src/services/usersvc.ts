@@ -33,6 +33,8 @@ export const creatHNUserNow = async ( body, gres , callback ) => {
         type : (body.userType?body.userType:'INDIVIDUAL'),
         nwid : randomize('0', keyLength),
         regDate : new Date(),
+        lastlogin : new Date(),
+        lastip : body.ipaddress,
         regSouce : (body.regSource?body.regSource:'APP' ),
         accType : (body.accType?body.accType:'CUSTOMER' ),
     }); 
@@ -40,26 +42,26 @@ export const creatHNUserNow = async ( body, gres , callback ) => {
     user.save(function(error){
         if(error){
             logger.log("USERSVC" , "creatHNUserNow  save error " + JSON.stringify(error) )
-            return callback(undefined)
+            return callback(undefined,false)
         }else{
             logger.log("USERSVC" , "creatHNUserNow  save success " + JSON.stringify(user) )
-            return callback(user)
+            return callback(user,true)
         }
     })
 }
 
 export const createHNUser = async ( body, gres , callback )=>{
     try{
-        logger.log("USERSVC" , "createHNUser body \n" +   JSON.stringify(body )  + " google response \n " + JSON.stringify(gres));
+        logger.log("USERSVC" , "createHNUser body \n " +   JSON.stringify(body ));
 
         User.findOne({ email : gres.email}, function( exerror, eUser){
             if(exerror){
                 logger.log("USERSVC" , "createHNUser  save error " + JSON.stringify(exerror) )
-                return callback(undefined)
+                return callback(undefined,false)
             }else{
                 if(eUser){
                     logger.log("USERSVC" , "createHNUser  save success " + JSON.stringify(eUser) )
-                    return callback(eUser)
+                    return callback(eUser,false)
                 }else{
                     creatHNUserNow(body,gres,callback)
                 }
