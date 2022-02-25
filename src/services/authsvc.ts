@@ -29,7 +29,7 @@ export const createUserSession = async ( userData, body, user ,callback )=>{
           logger.log("AUTHSVC" , "createUserSession  save error " + JSON.stringify(error) )
           return callback(token,false)
       }else{
-          logger.log("AUTHSVC" , "createUserSession  save success " + JSON.stringify(user) )
+          // logger.log("AUTHSVC" , "createUserSession  save success " + JSON.stringify(session) )
           return callback(token,true)
       }
   })
@@ -48,10 +48,10 @@ export const validateAndCreateUser = async ( body, callback )=>{
         let googleUserData : any = {}
         let gtokenUrl = 'https://oauth2.googleapis.com/tokeninfo?id_token=';
         gtokenUrl = gtokenUrl + body.idToken
-        logger.log("AUTHSVC" , "validateAndCreateUser url requesting "  + gtokenUrl);
+        // logger.log("AUTHSVC" , "validateAndCreateUser url requesting "  + gtokenUrl);
         axios.get(gtokenUrl)
           .then(function (response) {
-            logger.log("AUTHSVC" , "validateAndCreateUser response  "  + JSON.stringify(response.data));
+            // logger.log("AUTHSVC" , "validateAndCreateUser response  "  + JSON.stringify(response.data));
             googleUserData = response.data;
           })
           .catch(function (error) {

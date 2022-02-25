@@ -39,29 +39,33 @@ export const creatHNUserNow = async ( body, gres , callback ) => {
         accType : (body.accType?body.accType:'CUSTOMER' ),
     }); 
 
-    user.save(function(error){
+    user.save(function(error, sUser){
         if(error){
             logger.log("USERSVC" , "creatHNUserNow  save error " + JSON.stringify(error) )
-            return callback(undefined,false)
+            return callback(undefined,false, error)
         }else{
-            logger.log("USERSVC" , "creatHNUserNow  save success " + JSON.stringify(user) )
-            return callback(user,true)
+            // logger.log("USERSVC" , "creatHNUserNow  save success " + JSON.stringify(user) )
+            if(sUser){
+                return callback(user,true,"")
+            }else{
+                return callback(undefined,false, "User data could not be saved")
+            }
         }
     })
 }
 
 export const createHNUser = async ( body, gres , callback )=>{
     try{
-        logger.log("USERSVC" , "createHNUser body \n " +   JSON.stringify(body ));
+        // logger.log("USERSVC" , "createHNUser body \n " +   JSON.stringify(body ));
 
         User.findOne({ email : gres.email}, function( exerror, eUser){
             if(exerror){
                 logger.log("USERSVC" , "createHNUser  save error " + JSON.stringify(exerror) )
-                return callback(undefined,false)
+                return callback(undefined,false , exerror)
             }else{
                 if(eUser){
-                    logger.log("USERSVC" , "createHNUser  save success " + JSON.stringify(eUser) )
-                    return callback(eUser,false)
+                    // logger.log("USERSVC" , "createHNUser  save success " + JSON.stringify(eUser) )
+                    return callback(eUser,false, "")
                 }else{
                     creatHNUserNow(body,gres,callback)
                 }

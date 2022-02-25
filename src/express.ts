@@ -25,6 +25,11 @@ export default async () => {
   app.use('/hnoapi', openapiMiddleware)
   app.use('/hncapi', clientapiMiddleware)
   app.use('/hnpapi', appapiMiddleware)
+
+  // app.use('/hnowapi', openapiMiddleware)
+  // app.use('/hncwapi', clientapiMiddleware)
+  // app.use('/hnpwapi', appapiMiddleware)
+
   app.use(express.json());
   app.use(express.urlencoded());
   app.use(compression());

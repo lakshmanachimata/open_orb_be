@@ -35,6 +35,7 @@ export interface IUser extends Document {
   accType : {type : string,enum : AccType,},
   orgId : string,
   groupId : string,
+  token : string,
 }
 
 const UserSchema = new Schema<IUser>({
